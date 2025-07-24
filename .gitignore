@@ -1,0 +1,11 @@
+.env
+*.pyproj.user
+.vs/
+*.vspscc
+*.vssscc
+*.suo
+*.user
+*.log
+*.pdb
+*.obj
+node_modules/

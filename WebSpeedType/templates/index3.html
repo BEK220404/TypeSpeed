@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-translate="home_title">FastType</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            overflow-x: hidden; /* Prevent horizontal scroll on small screens */
+            height: 100vh;
+        }
+
+        .parallax-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .parallax-bg::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            }
+
+        .hero-text {
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pulse-animation {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: .5;
+            }
+        }
+
+        /* Burger menu specific styles for dropdown */
+        .hamburger-icon {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 20px;
+            cursor: pointer;
+            z-index: 60;
+            position: relative; /* Needed for positioning the dropdown */
+        }
+
+            .hamburger-icon span {
+                display: block;
+                width: 100%;
+                height: 3px;
+                background-color: #333; /* Darker color for visibility */
+                border-radius: 2px;
+                transition: all 0.3s ease-in-out;
+            }
+
+            .hamburger-icon.open span:nth-child(1) {
+                transform: translateY(8.5px) rotate(45deg);
+            }
+
+            .hamburger-icon.open span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger-icon.open span:nth-child(3) {
+                transform: translateY(-8.5px) rotate(-45deg);
+            }
+
+        .mobile-menu-dropdown {
+            position: absolute;
+            top: calc(100% + 10px); /* Position below the button */
+            right: 0; /* Align to the right of the button */
+            background-color: white;
+            border-radius: 0.5rem; /* rounded-md */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08); /* shadow-lg */
+            padding: 0.25rem 0; /* py-1 */
+            z-index: 55;
+            min-width: 160px; /* Adjust as needed */
+        }
+
+            .mobile-menu-dropdown a, .mobile-menu-dropdown button {
+                display: block;
+                padding: 0.5rem 1rem; /* px-4 py-2 */
+                font-size: 0.875rem; /* text-sm */
+                color: #4b5563; /* text-gray-700 */
+                transition: background-color 0.15s ease-in-out;
+                text-align: left; /* Align text to left for menu items */
+                width: 100%; /* Make buttons take full width */
+                border: none; /* Remove button border */
+                background: none; /* Remove button background */
+                cursor: pointer;
+            }
+
+                .mobile-menu-dropdown a:hover, .mobile-menu-dropdown button:hover {
+                    background-color: #f3f4f6; /* hover:bg-gray-100 */
+                }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <nav class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-200/50">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center">
+                    <div class="text-3xl font-bold gradient-text">TypeSpeed</div>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <button id="contact-button" class="text-gray-600 hover:text-gray-900 transition-colors" data-translate="contact">Contact</button>
+                    <div class="relative">
+                        <button id="language-dropdown-button" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105" data-translate="language">
+                            Language
+                        </button>
+                        <div id="language-dropdown-menu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden">
+                            <a href="/set-language/en" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-lang-code="en">English</a>
+                            <a href="/set-language/ru" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-lang-code="ru">Русский</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:hidden flex items-center relative">
+                    <button id="hamburger-button" class="hamburger-icon">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <div id="mobile-menu-dropdown" class="mobile-menu-dropdown hidden">
+                        <button id="mobile-contact-button" class="text-gray-900 hover:bg-gray-100 transition-colors" data-translate="contact">Contact</button>
+                        <div class="relative">
+                            <button id="mobile-language-dropdown-button" class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left" data-translate="language">
+                                Language
+                            </button>
+                            <div id="mobile-language-dropdown-menu" class="absolute left-0 mt-0 w-full bg-white rounded-md shadow-lg py-1 z-50 hidden">
+                                <a href="/set-language/en" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-lang-code="en">English</a>
+                                <a href="/set-language/ru" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-lang-code="ru">Русский</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="parallax-bg h-screen flex items-center justify-center relative">
+        <div class="absolute inset-0 bg-black/20"></div>
+        <div class="relative z-10 text-center text-white px-6 sm:px-8 max-w-6xl mx-auto">
+            <div class="hero-text">
+                <h1 class="text-6xl sm:text-8xl md:text-9xl font-black mb-8 leading-tight">
+                    <span data-translate="welcome">Welcome to</span>
+                    <span class="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-pink-400" data-translate="typespeed">
+                        TypeSpeed
+                    </span>
+                </h1>
+                <p class="text-xl sm:text-2xl md:text-3xl mb-12 max-w-4xl mx-auto font-light leading-relaxed" data-translate="hero_description">
+                    Boost your typing speed — start training right now. Practice daily and become a keyboard master!
+                </p>
+                <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                    <a href="/type" class="bg-white text-gray-900 px-12 py-4 rounded-full text-lg font-bold hover:bg-gray-100 transition-all duration-300 hover:scale-105 shadow-2xl inline-flex items-center justify-center" data-translate="start_free_trial">
+                        Start Free Trial
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="absolute top-1/4 left-1/4 w-4 h-4 bg-white/30 rounded-full pulse-animation"></div>
+        <div class="absolute top-1/3 right-1/3 w-6 h-6 bg-yellow-400/40 rounded-full pulse-animation" style="animation-delay: 0.5s;"></div>
+        <div class="absolute bottom-1/4 left-1/3 w-3 h-3 bg-pink-400/40 rounded-full pulse-animation" style="animation-delay: 1s;"></div>
+    </section>
+
+    <div id="contact-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+            <div class="text-xl font-semibold mb-4">📧 Contact Us</div>
+            <p class="text-gray-700 mb-4">
+                You can contact us anytime at <strong>edu.sbm2204@gmail.com</strong>
+                Support:11111111111111111111111
+            </p>
+            <div class="flex justify-end">
+                <button id="close-modal" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="absolute bottom-4 left-0 right-0 text-center text-gray-400 text-sm px-6">
+        <span class="mx-2">&copy; 2025 TypeSpeed. <span data-translate="all_rights_reserved">All rights reserved.</span></span>
+        <span class="mx-2">|</span>
+        <a href="/privacy-policy" class="mx-2 text-gray-400 hover:text-gray-200 transition-colors" data-translate="privacy_policy">Политика конфиденциальности</a>
+        <span class="mx-2">|</span>
+        <a href="/terms-of-service" class="mx-2 text-gray-400 hover:text-gray-200 transition-colors" data-translate="terms_of_service">Условия обслуживания</a>
+        <span class="mx-2">|</span>
+        <a href="/about-us" class="mx-2 text-gray-400 hover:text-gray-200 transition-colors" data-translate="about_us">О сайте</a>
+    </div>
+
+
+    <script>
+    const translations = {
+      en: {
+        home_title: "TypeSpeed",
+        contact: "Contact",
+        language: "Language",
+        typespeed: "TypeSpeed",
+        welcome: "Welcome to",
+        hero_description: "Boost your typing speed — start training right now. Practice daily and become a keyboard master!",
+        start_free_trial: "Start Typing",
+        home: "Home",
+        privacy_policy: "Privacy Policy",
+        terms_of_service: "Terms of Service",
+        about_us: "About Us",
+        all_rights_reserved: "All rights reserved."
+      },
+      ru: {
+        home_title: "TypeSpeed",
+        contact: "Контакты",
+        language: "Язык",
+        typespeed: "TypeSpeed",
+        welcome: "Добро пожаловать в",
+        hero_description: "Прокачай свою скорость печати — начни тренироваться прямо сейчас. Тренируйся каждый день и стань мастером клавиатуры!",
+        start_free_trial: "Начать печатать",
+        home: "Домой",
+        privacy_policy: "Политика конфиденциальности",
+        terms_of_service: "Условия обслуживания",
+        about_us: "О сайте",
+        all_rights_reserved: "Все права защищены."
+      }
+    };
+
+    const currentLang = "{{ lang }}";
+
+    function applyTranslations() {
+      document.querySelectorAll('[data-translate]').forEach(element => {
+        const key = element.dataset.translate;
+        if (translations[currentLang] && translations[currentLang][key]) {
+          element.textContent = translations[currentLang][key];
+        }
+      });
+      document.title = translations[currentLang].home_title;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      applyTranslations();
+
+      // Desktop dropdown
+      const langDropdownButton = document.getElementById('language-dropdown-button');
+      const langDropdownMenu = document.getElementById('language-dropdown-menu');
+
+      langDropdownButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+        langDropdownMenu.classList.toggle('hidden');
+      });
+
+      // Mobile language dropdown (nested in burger menu)
+      const mobileLangDropdownButton = document.getElementById('mobile-language-dropdown-button');
+      const mobileLangDropdownMenu = document.getElementById('mobile-language-dropdown-menu');
+
+      mobileLangDropdownButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+        mobileLangDropdownMenu.classList.toggle('hidden');
+      });
+
+
+      document.addEventListener('click', (event) => {
+        // Close desktop language dropdown
+        if (!langDropdownButton.contains(event.target) && !langDropdownMenu.contains(event.target)) {
+          langDropdownMenu.classList.add('hidden');
+        }
+        // Close mobile language dropdown
+        if (!mobileLangDropdownButton.contains(event.target) && !mobileLangDropdownMenu.contains(event.target)) {
+            mobileLangDropdownMenu.classList.add('hidden');
+        }
+        // Close burger menu dropdown if click outside
+        const hamburgerButton = document.getElementById('hamburger-button');
+        const mobileMenuDropdown = document.getElementById('mobile-menu-dropdown');
+        if (!hamburgerButton.contains(event.target) && !mobileMenuDropdown.contains(event.target)) {
+            mobileMenuDropdown.classList.add('hidden');
+            hamburgerButton.classList.remove('open');
+        }
+      });
+
+      // 🟦 Contact modal
+      const contactBtn = document.getElementById('contact-button');
+      const mobileContactBtn = document.getElementById('mobile-contact-button');
+      const modal = document.getElementById('contact-modal');
+      const closeModal = document.getElementById('close-modal');
+
+      contactBtn.addEventListener('click', () => {
+        modal.classList.remove('hidden');
+      });
+
+      mobileContactBtn.addEventListener('click', () => {
+        modal.classList.remove('hidden');
+        // Close mobile menu dropdown when contact modal opens
+        document.getElementById('mobile-menu-dropdown').classList.add('hidden');
+        document.getElementById('hamburger-button').classList.remove('open');
+      });
+
+
+      closeModal.addEventListener('click', () => {
+        modal.classList.add('hidden');
+      });
+
+      // close modal if click outside
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.add('hidden');
+        }
+      });
+
+      // Burger menu logic for dropdown
+      const hamburgerButton = document.getElementById('hamburger-button');
+      const mobileMenuDropdown = document.getElementById('mobile-menu-dropdown');
+
+      hamburgerButton.addEventListener('click', (event) => {
+        event.stopPropagation(); // Prevent document click listener from closing it immediately
+        hamburgerButton.classList.toggle('open');
+        mobileMenuDropdown.classList.toggle('hidden');
+      });
+
+      // Close mobile menu dropdown when a link inside is clicked
+      mobileMenuDropdown.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          hamburgerButton.classList.remove('open');
+          mobileMenuDropdown.classList.add('hidden');
+        });
+      });
+    });
+    </script>
+</body>
+</html>

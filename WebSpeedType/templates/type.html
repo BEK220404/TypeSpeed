@@ -1,0 +1,1056 @@
+﻿<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="typing_trainer_title">TypeSpeed</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #f3f4f6; /* Light gray background */
+        }
+
+        .parallax-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .parallax-bg::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            }
+
+        .hero-text {
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .pulse-animation {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: .5;
+            }
+        }
+
+        /* Styles for typing trainer */
+        #typing-text-container {
+            font-size: 2rem; /* Large font size for readability */
+            line-height: 1.5;
+            word-spacing: 0.1rem;
+            height: 100%; /* Занимает всю высоту родителя */
+            overflow-y: auto; /* ПОЯВЛЯЕТСЯ СКРОЛЛ по вертикали */
+            display: block; /* Убедимся, что это блочный элемент */
+            cursor: text; /* Indicate it's clickable for typing */
+        }
+
+            #typing-text-container span {
+                transition: background-color 0.1s ease; /* Smooth transition for color changes */
+                padding: 2px 0; /* Add a little padding for better visual */
+                border-radius: 2px;
+            }
+
+        .correct {
+            color: #10B981; /* Tailwind green-500 */
+        }
+
+        .incorrect {
+            color: #EF4444; /* Tailwind red-500 */
+            background-color: rgba(239, 68, 68, 0.2); /* Light red background for errors */
+            border-bottom: 2px solid #EF4444; /* Underline for errors */
+        }
+
+        .current {
+            background-color: rgba(0, 0, 0, 0.1); /* Highlight current character */
+            border-radius: 4px;
+            padding: 2px 0;
+        }
+
+        /* Keyboard styles */
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+
+        .key {
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 10px 15px;
+            margin: 4px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 45px;
+            height: 45px;
+            cursor: pointer;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            transition: all 0.1s ease-in-out;
+            user-select: none; /* Prevent text selection */
+        }
+
+            .key:active, .key.active {
+                transform: translateY(1px);
+                box-shadow: none;
+                background-color: #f3f4f6;
+            }
+
+            .key.highlighted {
+                background-color: #bfdbfe; /* Tailwind blue-200 */
+                border-color: #60a5fa; /* Tailwind blue-400 */
+            }
+
+        .spacebar {
+            width: 300px;
+        }
+
+        .tab-key {
+            min-width: 70px;
+        }
+
+        .caps-key, .shift-key, .enter-key {
+            min-width: 90px;
+        }
+
+        .backspace-key {
+            min-width: 100px;
+        }
+
+        /* Modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+            .modal-overlay.show {
+                opacity: 1;
+                visibility: visible;
+            }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: #9ca3af;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+            .close-button:hover {
+                color: #6b7280;
+            }
+
+        /* Mobile specific styles */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none; /* Hide desktop nav links */
+            }
+
+            .hamburger-menu {
+                display: block !important; /* Show hamburger button */
+            }
+
+            .mobile-menu {
+                display: flex !important; /* Show mobile menu */
+                flex-direction: column;
+                position: absolute;
+                top: 80px; /* Below navbar */
+                left: 0;
+                width: 100%;
+                background-color: white;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                padding: 1rem 0;
+                z-index: 40; /* Below fixed navbar */
+            }
+
+                .mobile-menu.hidden {
+                    display: none !important;
+                }
+
+                .mobile-menu a, .mobile-menu button {
+                    padding: 0.75rem 1.5rem;
+                    text-align: center;
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+
+            #keyboard {
+                display: none; /* Hide virtual keyboard on mobile */
+            }
+
+            #typing-text-container {
+                font-size: 1.5rem; /* Smaller font on mobile */
+                height: 200px; /* Adjust height for mobile */
+            }
+
+            .key {
+                min-width: 35px; /* Smaller keys */
+                height: 35px;
+                font-size: 0.9rem;
+                margin: 2px;
+                padding: 5px 8px;
+            }
+
+            .spacebar {
+                width: 180px; /* Smaller spacebar */
+            }
+
+            .tab-key, .caps-key, .shift-key, .enter-key, .backspace-key {
+                min-width: auto; /* Auto width for special keys */
+                flex-grow: 1; /* Allow them to grow */
+            }
+
+            .modal-content {
+                padding: 20px 25px; /* Adjust modal padding */
+            }
+
+            .wpm-display-mobile {
+                order: -1; /* Move WPM to the top on mobile */
+                width: 100%;
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+
+            .flex-wrap > button {
+                width: 100%; /* Full width buttons on mobile */
+                margin-bottom: 1rem;
+            }
+
+            #start-typing-mobile-button {
+                display: block; /* Show on mobile */
+                margin-top: 1.5rem; /* Add some space above */
+                width: 100%;
+                max-width: 300px; /* Max width for consistency */
+            }
+        }
+
+        /* Desktop specific styles for start button */
+        @media (min-width: 769px) {
+            #start-typing-mobile-button {
+                display: none; /* Hide on desktop */
+            }
+        }
+
+        /* Updated styles for hidden-input */
+        #hidden-input {
+            position: absolute; /* Changed from fixed to absolute, relative to parent container */
+            width: 1px;
+            height: 1px;
+            top: -9999px; /* Move off-screen */
+            left: -9999px; /* Move off-screen */
+            padding: 0;
+            border: 0;
+            margin: 0;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap; /* Prevents text from wrapping */
+            -webkit-user-modify: read-write-plaintext-only; /* For iOS Safari */
+            opacity: 0; /* Keep opacity 0 but remove pointer-events-none */
+            z-index: -1; /* Ensure it's behind other elements */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 flex flex-col min-h-screen">
+    <nav class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-200/50">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center">
+                    <div class="text-3xl font-bold gradient-text mr-4">TypeSpeed</div>
+                    <a href="/" class="text-gray-600 hover:text-gray-900 transition-colors text-lg font-medium px-3 py-2 rounded-md hover:bg-gray-100 nav-links" data-translate="home">
+                        Home
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8 nav-links">
+                    <div class="relative">
+                        <button id="language-dropdown-button" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105" data-translate="language">
+                            Language
+                        </button>
+                        <div id="language-dropdown-menu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden">
+                            <a href="/set-language/en" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-lang-code="en">English</a>
+                            <a href="/set-language/ru" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-lang-code="ru">Русский</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="md:hidden flex items-center">
+                    <button id="hamburger-button" class="text-gray-600 hover:text-gray-900 focus:outline-none">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden mobile-menu">
+            <a href="/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-translate="home">
+                Home
+            </a>
+            <div class="relative w-full text-center">
+                <button id="mobile-language-button" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105 w-auto mt-2" data-translate="language">
+                    Language
+                </button>
+                <div id="mobile-language-dropdown" class="w-full bg-white rounded-md shadow-lg py-1 z-50 hidden mt-2">
+                    <a href="/set-language/en" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-lang-code="en">English</a>
+                    <a href="/set-language/ru" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-lang-code="ru">Русский</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="flex-grow flex flex-col items-center justify-center pt-24 pb-8 px-4 bg-gradient-to-br from-blue-100 to-purple-100">
+
+        <div class="flex items-center justify-between w-full max-w-4xl mb-8 flex-wrap">
+            <button id="custom-text-button" class="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-full text-lg font-semibold transition-colors duration-300 shadow-md mb-4 sm:mb-0" data-translate="add_custom_text">
+                Add Custom Text
+            </button>
+            <div class="flex items-center space-x-4 mb-4 sm:mb-0 wpm-display-mobile">
+                <div id="wpm-display" class="text-3xl font-bold text-gray-700">
+                    WPM: 0
+                </div>
+                <div id="timer-display" class="text-3xl font-bold text-gray-700">
+                    00:00.0
+                </div>
+            </div>
+            <button id="random-sentence-button" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full text-lg font-semibold transition-colors duration-300 shadow-md" data-translate="random_sentence">
+                Random Sentence
+            </button>
+        </div>
+
+        <div class="bg-white p-8 rounded-lg shadow-xl max-w-5xl w-full mb-6 border border-gray-200 relative" style="height: 250px;">
+            <div id="typing-text-container" class="text-gray-700 leading-relaxed tracking-wide focus:outline-none h-full overflow-y-auto">
+            </div>
+            <input type="text" id="hidden-input" class="absolute" aria-hidden="true" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="width: 1px; height: 1px; top: -9999px; left: -9999px;">
+        </div>
+
+        <div id="keyboard" class="bg-white p-6 rounded-lg shadow-xl w-full max-w-5xl">
+            <div class="text-center text-lg text-gray-500 mb-4 md:block hidden" data-translate="click_to_type">
+                Click here and start typing
+            </div>
+        </div>
+
+        <button id="start-typing-mobile-button" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full text-lg font-semibold transition-colors duration-300 shadow-md md:hidden" data-translate="start_typing">
+            Начинать
+        </button>
+
+        <button id="reset-button" class="mt-8 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full text-lg font-semibold transition-colors duration-300 shadow-md" data-translate="reset">
+            Reset
+        </button>
+    </section>
+
+    <div id="results-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-button" id="close-modal-button">&times;</button>
+            <h2 class="text-4xl font-bold mb-4 text-gray-800" data-translate="congratulations_title">Congratulations!</h2>
+            <p class="text-2xl text-gray-700 mb-6" data-translate="your_speed_is">Your speed is:</p>
+            <p id="final-wpm-display" class="text-6xl font-extrabold gradient-text mb-8">0 WPM</p>
+            <p id="final-accuracy-display" class="text-2xl text-gray-700 mb-6" data-translate="your_accuracy_is">Accuracy: 0%</p>
+            <p id="final-time-display" class="text-2xl text-gray-700 mb-6" data-translate="time_taken">Time: 00:00.0</p>
+            <button id="modal-reset-button" class="bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 rounded-full text-xl font-semibold transition-colors duration-300 shadow-md" data-translate="try_again">
+                Try Again
+            </button>
+        </div>
+    </div>
+
+    <div id="custom-text-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-button" id="close-custom-text-modal">&times;</button>
+            <h2 class="text-2xl font-bold mb-4 text-gray-800" data-translate="enter_custom_text">Enter your text:</h2>
+            <textarea id="custom-text-input" class="w-full h-32 p-2 border rounded-md text-gray-700 focus:ring-blue-500 focus:border-blue-500" placeholder="Paste or type your custom text here..."></textarea>
+            <div class="flex justify-end mt-4">
+                <button id="submit-custom-text-button" class="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold transition-colors duration-300 shadow-md" data-translate="start_typing">Start Typing</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                typing_trainer_title: "TypeSpeed - Typing Trainer",
+                home: "Home",
+                features: "Features",
+                contact: "Contact",
+                language: "Language",
+                add_custom_text: "Add Custom Text",
+                random_sentence: "Random Sentence",
+                reset: "Reset",
+                wpm_prefix: "WPM: ",
+                congratulations_title: "Congratulations!",
+                your_speed_is: "Your speed is:",
+                your_accuracy_is: "Accuracy:",
+                time_taken: "Time:",
+                try_again: "Try Again",
+                no_text_entered_alert: "No text was entered.",
+                failed_to_get_sentence: "Failed to get random sentence. ",
+                error_loading_sentence: "An error occurred while loading a random sentence. Check console for details.",
+                enter_custom_text: "Enter your text:",
+                custom_text_placeholder: "Paste or type your custom text here...",
+                start_typing: "Start Typing",
+                click_to_type: "Click here and start typing"
+            },
+            ru: {
+                typing_trainer_title: "TypeSpeed - Тренажер Печати",
+                home: "Домой",
+                features: "Возможности",
+                contact: "Контакты",
+                language: "Язык",
+                add_custom_text: "Добавить свой текст",
+                random_sentence: "Случайное предложение",
+                reset: "Сбросить",
+                wpm_prefix: "Слов/мин: ",
+                congratulations_title: "Поздравляем!",
+                your_speed_is: "Ваша скорость:",
+                your_accuracy_is: "Точность:",
+                time_taken: "Время:",
+                try_again: "Попробовать снова",
+                no_text_entered_alert: "Текст не был введен.",
+                failed_to_get_sentence: "Не удалось получить случайное предложение. ",
+                error_loading_sentence: "Произошла ошибка при загрузке случайного предложения. Проверьте консоль для деталей.",
+                enter_custom_text: "Введите свой текст:",
+                custom_text_placeholder: "Вставьте или напечатайте свой текст здесь...",
+                start_typing: "Начинать",
+                click_to_type: "Нажмите здесь и начните печатать"
+            }
+        };
+
+        const currentLang = "{{ lang }}";
+
+        function applyTranslations() {
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.dataset.translate;
+                if (translations[currentLang] && translations[currentLang][key]) {
+                    element.textContent = translations[currentLang][key];
+                }
+            });
+            const customTextInputPlaceholder = document.getElementById('custom-text-input');
+            if (customTextInputPlaceholder) {
+                customTextInputPlaceholder.placeholder = translations[currentLang].custom_text_placeholder;
+            }
+            document.title = translations[currentLang].typing_trainer_title;
+        }
+
+        let currentText = "";
+
+        const typingTextContainer = document.getElementById('typing-text-container');
+        const hiddenInput = document.getElementById('hidden-input');
+        const keyboardElement = document.getElementById('keyboard');
+        const resetButton = document.getElementById('reset-button');
+        const wpmDisplay = document.getElementById('wpm-display');
+        const timerDisplay = document.getElementById('timer-display'); // Timer display element
+        const customTextButton = document.getElementById('custom-text-button');
+        const randomSentenceButton = document.getElementById('random-sentence-button');
+        const startTypingMobileButton = document.getElementById('start-typing-mobile-button');
+
+        // Modal elements (Results)
+        const resultsModal = document.getElementById('results-modal');
+        const finalWpmDisplay = document.getElementById('final-wpm-display');
+        const finalAccuracyDisplay = document.getElementById('final-accuracy-display');
+        const finalTimeDisplay = document.getElementById('final-time-display'); // Final time display
+        const closeModalButton = document.getElementById('close-modal-button');
+        const modalResetButton = document.getElementById('modal-reset-button');
+
+        // Modal elements (Custom Text)
+        const customTextModal = document.getElementById('custom-text-modal');
+        const closeCustomTextModalButton = document.getElementById('close-custom-text-modal');
+        const customTextInput = document.getElementById('custom-text-input');
+        const submitCustomTextButton = document.getElementById('submit-custom-text-button');
+
+        // Mobile Menu Elements
+        const hamburgerButton = document.getElementById('hamburger-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLanguageButton = document.getElementById('mobile-language-button');
+        const mobileLanguageDropdown = document.getElementById('mobile-language-dropdown');
+
+
+        let charIndex = 0;
+        let incorrectChars = {};
+        let startTime = null; // Time when first char is typed (for WPM calculation)
+        let hasTypedFirstChar = false; // Indicates if the first character has been typed
+        let totalTypedChars = 0;
+
+        let elapsedMilliseconds = 0; // Tracks total milliseconds for display
+        let animationFrameId = null; // ID для отслеживания requestAnimationFrame
+        let startTimeForAnimation = null; // Время старта для расчета elapsedMilliseconds в requestAnimationFrame
+        let isVisualTimerRunning = false; // Flag to control visual timer
+
+
+        function formatTime(totalMs) {
+            const minutes = Math.floor(totalMs / 60000);
+            const seconds = Math.floor((totalMs % 60000) / 1000);
+            const milliseconds = Math.floor((totalMs % 1000) / 100); // Changed to divide by 100 for one-digit milliseconds
+            const formattedMilliseconds = String(milliseconds); // Removed padStart(2, '0')
+
+            const formattedMinutes = String(minutes).padStart(2, '0');
+            const formattedSeconds = String(seconds).padStart(2, '0');
+
+            return `${formattedMinutes}:${formattedSeconds}.${formattedMilliseconds}`;
+        }
+
+        // Новая функция для обновления секундомера с requestAnimationFrame
+        function updateTimerFrame(timestamp) {
+            if (!startTimeForAnimation) {
+                startTimeForAnimation = timestamp; // Запоминаем время начала анимации
+            }
+
+            elapsedMilliseconds = timestamp - startTimeForAnimation; // Вычисляем прошедшее время
+            timerDisplay.textContent = formatTime(elapsedMilliseconds); // Обновляем отображение
+
+            if (isVisualTimerRunning) {
+                animationFrameId = requestAnimationFrame(updateTimerFrame); // Запрашиваем следующий кадр
+            }
+        }
+
+        function startVisualTimer() {
+            if (isVisualTimerRunning) return;
+            isVisualTimerRunning = true;
+            startTimeForAnimation = null; // Сбрасываем время начала для нового запуска
+            animationFrameId = requestAnimationFrame(updateTimerFrame); // Запускаем цикл requestAnimationFrame
+        }
+
+        function stopVisualTimer() {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId); // Отменяем следующий кадр
+                animationFrameId = null;
+            }
+            isVisualTimerRunning = false;
+        }
+
+        function resetVisualTimer() {
+            stopVisualTimer(); // Сначала останавливаем, если запущен
+            elapsedMilliseconds = 0;
+            timerDisplay.textContent = '00:00.0'; // Reset display with one-digit milliseconds
+            startTimeForAnimation = null; // Также сбрасываем это
+        }
+
+
+        function loadText(textToLoad = currentText) {
+            currentText = textToLoad;
+            typingTextContainer.innerHTML = '';
+            currentText.split('').forEach((char, index) => {
+                const span = document.createElement('span');
+                span.textContent = char;
+                span.dataset.index = index;
+                typingTextContainer.appendChild(span);
+            });
+
+            charIndex = 0;
+            incorrectChars = {};
+            startTime = null;
+            hasTypedFirstChar = false; // Reset this flag
+            totalTypedChars = 0;
+            resetVisualTimer(); // Reset the visual timer
+
+            updateTextDisplay();
+            hiddenInput.value = '';
+
+            if (window.innerWidth > 768) {
+                highlightKeyboardKey(currentText[0]);
+            }
+
+            wpmDisplay.textContent = translations[currentLang].wpm_prefix + '0';
+        }
+
+        function updateTextDisplay() {
+            const spans = typingTextContainer.querySelectorAll('span');
+            const currentSpan = spans[charIndex];
+            if (currentSpan) {
+                const containerHeight = typingTextContainer.clientHeight;
+                const scrollTop = typingTextContainer.scrollTop;
+                const spanOffsetTop = currentSpan.offsetTop;
+
+                if (spanOffsetTop + currentSpan.clientHeight > scrollTop + containerHeight) {
+                    typingTextContainer.scrollTop = spanOffsetTop - containerHeight + currentSpan.clientHeight + 20;
+                }
+                else if (spanOffsetTop < scrollTop) {
+                    typingTextContainer.scrollTop = spanOffsetTop - 20;
+                }
+            }
+
+
+            spans.forEach((span, index) => {
+                span.classList.remove('correct', 'incorrect', 'current');
+
+                if (index < charIndex) {
+                    if (incorrectChars[index]) {
+                        span.classList.add('incorrect');
+                    } else {
+                        span.classList.add('correct');
+                    }
+                }
+
+                if (index === charIndex) {
+                    span.classList.add('current');
+                }
+            });
+        }
+
+        const keyboardLayouts = {
+            en: [
+                ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace'],
+                ['Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\'],
+                ['CapsLock', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", 'Enter'],
+                ['Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 'Shift'],
+                ['Control', 'Alt', 'Space', 'Alt', 'Control']
+            ],
+            ru: [
+                ['ё', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace'],
+                ['Tab', 'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', '\\'],
+                ['CapsLock', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'Enter'],
+                ['Shift', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.', 'Shift'],
+                ['Control', 'Alt', 'Space', 'Alt', 'Control']
+            ]
+        };
+
+        const ruShiftMap = {
+            '1': '!', '2': '"', '3': '№', '4': ';', '5': '%', '6': ':', '7': '?', '8': '*', '9': '(', '0': ')', '-': '_', '=': '+',
+            ',': '<', '.': '>', '/': ',',
+            'х': 'Х', 'ъ': 'Ъ', 'ж': 'Ж', 'э': 'Э', 'б': 'Б', 'ю': 'Ю',
+            'й': 'Й', 'ц': 'Ц', 'у': 'У', 'к': 'К', 'е': 'Е', 'н': 'Н', 'г': 'Г', 'ш': 'Ш', 'щ': 'Щ', 'з': 'З',
+            'ф': 'Ф', 'ы': 'Ы', 'в': 'В', 'а': 'А', 'п': 'П', 'р': 'П', 'о': 'О', 'л': 'Л', 'д': 'Д',
+            'я': 'Я', 'ч': 'Ч', 'с': 'С', 'м': 'М', 'и': 'И', 'т': 'Т', 'ь': 'Ь', 'ё': 'Ё'
+        };
+
+
+        function generateKeyboard() {
+            keyboardElement.innerHTML = '';
+            const instructionDiv = document.createElement('div');
+            instructionDiv.classList.add('text-center', 'text-lg', 'text-gray-500', 'mb-4', 'md:block', 'hidden');
+            instructionDiv.dataset.translate = 'click_to_type';
+            keyboardElement.appendChild(instructionDiv);
+
+            const layout = keyboardLayouts[currentLang];
+
+            layout.forEach(row => {
+                const rowDiv = document.createElement('div');
+                rowDiv.classList.add('keyboard-row');
+                row.forEach(keyText => {
+                    const keyDiv = document.createElement('div');
+                    keyDiv.classList.add('key');
+                    keyDiv.textContent = keyText;
+
+                    if (keyText === 'Space') keyDiv.classList.add('spacebar');
+                    if (keyText === 'Tab') keyDiv.classList.add('tab-key');
+                    if (keyText === 'CapsLock') keyDiv.classList.add('caps-key');
+                    if (keyText === 'Shift') keyDiv.classList.add('shift-key');
+                    if (keyText === 'Enter') keyDiv.classList.add('enter-key');
+                    if (keyText === 'Backspace') keyDiv.classList.add('backspace-key');
+                    if (keyText === 'Control' || keyText === 'Alt') keyDiv.classList.add('utility-key');
+
+                    if (currentLang === 'ru' && keyText.match(/[а-яёА-ЯЁ]/)) {
+                         keyDiv.dataset.key = keyText.toLowerCase();
+                    } else {
+                        keyDiv.dataset.key = keyText.toLowerCase();
+                    }
+
+
+                    rowDiv.appendChild(keyDiv);
+                });
+                keyboardElement.appendChild(rowDiv);
+            });
+            applyTranslations();
+        }
+
+        function highlightKeyboardKey(charToHighlight) {
+            if (window.innerWidth <= 768) {
+                return;
+            }
+
+            document.querySelectorAll('.key.highlighted').forEach(key => {
+                key.classList.remove('highlighted');
+            });
+
+            let actualChar = charToHighlight;
+            let isShiftRequired = false;
+
+            if (charToHighlight === ' ') {
+                actualChar = 'space';
+            } else if (currentLang === 'en') {
+                if (charToHighlight.match(/[A-Z!@#$%^&*()_+{}:"<>?~|]/)) {
+                    isShiftRequired = true;
+                }
+                actualChar = charToHighlight.toLowerCase();
+            } else if (currentLang === 'ru') {
+                // Check if the character needs Shift based on the ruShiftMap or if it's an uppercase Russian letter
+                if (Object.values(ruShiftMap).includes(charToHighlight) || (charToHighlight.match(/[А-ЯЁ]/) && !ruShiftMap[charToHighlight.toLowerCase()])) {
+                    isShiftRequired = true;
+                    // Find the base key for the shifted character (e.g., 'Й' comes from 'й')
+                    for (const key in ruShiftMap) {
+                        if (ruShiftMap[key] === charToHighlight) {
+                            actualChar = key;
+                            break;
+                        }
+                    }
+                    if (actualChar === charToHighlight) { // If not found in ruShiftMap, it's just uppercase
+                        actualChar = charToHighlight.toLowerCase();
+                    }
+                } else {
+                    actualChar = charToHighlight.toLowerCase();
+                }
+            }
+
+
+            const keyToFind = document.querySelector(`.key[data-key="${actualChar}"]`);
+            if (keyToFind) {
+                keyToFind.classList.add('highlighted');
+            } else {
+                // Fallback for keys not directly in data-key (e.g., special symbols with Shift)
+                const allKeys = document.querySelectorAll('.key');
+                let foundKeyByTextContent = false;
+                allKeys.forEach(key => {
+                    const specialKeys = ['backspace', 'enter', 'tab', 'control', 'alt', 'capslock'];
+                    if (specialKeys.includes(key.dataset.key)) {
+                        return;
+                    }
+                    if (key.textContent === charToHighlight) {
+                        key.classList.add('highlighted');
+                        foundKeyByTextContent = true;
+                    }
+                    // For Russian shifted characters where the base key's textContent might be different
+                    if (currentLang === 'ru' && ruShiftMap[key.dataset.key] === charToHighlight) {
+                        key.classList.add('highlighted');
+                        foundKeyByTextContent = true;
+                    }
+                });
+                if (foundKeyByTextContent) {
+                    isShiftRequired = true;
+                }
+            }
+
+
+            if (isShiftRequired) {
+                document.querySelectorAll('.key[data-key="shift"]').forEach(shiftKey => {
+                    shiftKey.classList.add('highlighted');
+                });
+            }
+        }
+
+        function calculateWPM() {
+            // WPM calculation should still be based on actual typing duration from startTime to endTime
+            if (!startTime || charIndex === 0) return { wpm: 0, accuracy: 0, time: elapsedMilliseconds };
+
+            const endTime = new Date().getTime();
+            const timeInMinutes = (endTime - startTime) / 60000; // Use actual typing duration for WPM
+
+            let correctTypedChars = 0;
+            for (let i = 0; i < charIndex; i++) {
+                if (!incorrectChars[i]) {
+                    correctTypedChars++;
+                }
+            }
+            const wpm = (correctTypedChars / 5) / timeInMinutes;
+
+            let accuracy = 0;
+            if (totalTypedChars > 0) {
+                accuracy = (correctTypedChars / totalTypedChars) * 100;
+            }
+
+            return { wpm: Math.round(wpm), accuracy: Math.round(accuracy), time: elapsedMilliseconds }; // Pass elapsedMilliseconds for display
+        }
+
+        // Event Listener for typing input
+        hiddenInput.addEventListener('input', (e) => {
+            if (!hasTypedFirstChar) {
+                startTime = new Date().getTime(); // Set start time for WPM calculation
+                hasTypedFirstChar = true;
+                // Visual timer is already started by click events
+            }
+
+            const typedChar = e.data;
+
+            if (typedChar === null) {
+                return;
+            }
+
+            totalTypedChars++;
+
+            if (charIndex >= currentText.length) {
+                hiddenInput.value = '';
+                return;
+            }
+
+            const expectedChar = currentText[charIndex];
+
+            if (typedChar === expectedChar) {
+                delete incorrectChars[charIndex];
+            } else {
+                incorrectChars[charIndex] = true;
+            }
+
+            charIndex++;
+            updateTextDisplay();
+
+            if (charIndex >= currentText.length) {
+                stopVisualTimer(); // Stop the visual timer
+                const results = calculateWPM();
+                wpmDisplay.textContent = translations[currentLang].wpm_prefix + results.wpm;
+
+                finalWpmDisplay.textContent = `${results.wpm} ${translations[currentLang].wpm_prefix.replace(':', '')}`;
+                finalAccuracyDisplay.textContent = `${translations[currentLang].your_accuracy_is} ${results.accuracy}%`;
+                finalTimeDisplay.textContent = `${translations[currentLang].time_taken} ${formatTime(elapsedMilliseconds)}`; // Display final time with milliseconds
+                resultsModal.classList.add('show');
+                hiddenInput.blur();
+
+                document.querySelectorAll('.key.highlighted').forEach(key => {
+                    key.classList.remove('highlighted');
+                });
+            } else {
+                if (window.innerWidth > 768) {
+                    highlightKeyboardKey(currentText[charIndex]);
+                }
+            }
+            hiddenInput.value = '';
+        });
+
+        // Handle Backspace and other special keys
+        hiddenInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace') {
+                e.preventDefault();
+
+                if (charIndex > 0) {
+                    charIndex--;
+                    delete incorrectChars[charIndex];
+                    updateTextDisplay();
+                    if (window.innerWidth > 768) {
+                        highlightKeyboardKey(currentText[charIndex]);
+                    }
+                }
+            }
+
+            if (window.innerWidth > 768) {
+                let keyElement = document.querySelector(`.key[data-key="${e.key.toLowerCase()}"]`);
+                if (e.key === ' ') {
+                    keyElement = document.querySelector('.key[data-key="space"]');
+                }
+                if (e.key === 'Shift' && e.location === 1) {
+                    keyElement = document.querySelector('.key[data-key="shift"]:first-of-type');
+                } else if (e.key === 'Shift' && e.location === 2) {
+                    keyElement = document.querySelector('.key[data-key="shift"]:last-of-type');
+                }
+
+
+                if (keyElement) {
+                    keyElement.classList.add('active');
+                    setTimeout(() => {
+                        keyElement.classList.remove('active');
+                    }, 100);
+                }
+            }
+        });
+
+        keyboardElement.addEventListener('click', (e) => {
+            if (window.innerWidth > 768) {
+                const clickedKey = e.target.closest('.key');
+                if (clickedKey) {
+                    clickedKey.classList.add('active');
+                    setTimeout(() => {
+                        clickedKey.classList.remove('active');
+                    }, 100);
+                }
+            }
+            hiddenInput.focus();
+            startVisualTimer(); // Start visual timer on keyboard click
+        });
+
+        typingTextContainer.addEventListener('click', () => {
+            hiddenInput.focus();
+            startVisualTimer(); // Start visual timer on typing area click
+        });
+
+        startTypingMobileButton.addEventListener('click', () => {
+            hiddenInput.focus();
+            startVisualTimer(); // Start visual timer on mobile start button click
+        });
+
+
+        resetButton.addEventListener('click', () => {
+            loadText(currentText);
+        });
+
+        customTextButton.addEventListener('click', () => {
+            customTextModal.classList.add('show');
+            customTextInput.value = "";
+            customTextInput.focus();
+        });
+
+        closeCustomTextModalButton.addEventListener('click', () => {
+            customTextModal.classList.remove('show');
+        });
+
+        submitCustomTextButton.addEventListener('click', () => {
+            const customInputValue = customTextInput.value.trim();
+            if (customInputValue !== "") {
+                loadText(customInputValue);
+                customTextModal.classList.remove('show');
+            } else {
+                alert(translations[currentLang].no_text_entered_alert);
+            }
+        });
+
+        randomSentenceButton.addEventListener('click', async () => {
+            try {
+                const response = await fetch('/api/random-sentence');
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`HTTP error! status: ${response.status}. ${errorData.error || ''}`);
+                }
+                const data = await response.json();
+                if (data.sentence) {
+                    loadText(data.sentence);
+                } else {
+                    alert(translations[currentLang].failed_to_get_sentence + (data.error || ''));
+                }
+            } catch (error) {
+                console.error('Ошибка при получении случайного предложения:', error);
+                alert(translations[currentLang].error_loading_sentence);
+            }
+        });
+
+        function closeResultsModal() {
+            resultsModal.classList.remove('show');
+            hiddenInput.focus();
+        }
+
+        closeModalButton.addEventListener('click', closeResultsModal);
+        modalResetButton.addEventListener('click', () => {
+            closeResultsModal();
+            randomSentenceButton.click();
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === resultsModal) {
+                closeResultsModal();
+            }
+            if (event.target === customTextModal) {
+                customTextModal.classList.remove('show');
+            }
+            if (!mobileMenu.contains(event.target) && !hamburgerButton.contains(event.target) && mobileMenu.classList.contains('flex')) {
+                mobileMenu.classList.add('hidden');
+                mobileMenu.classList.remove('flex');
+            }
+        });
+
+        hamburgerButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            mobileMenu.classList.toggle('flex');
+            document.getElementById('language-dropdown-menu').classList.add('hidden');
+        });
+
+        mobileLanguageButton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            mobileLanguageDropdown.classList.toggle('hidden');
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            applyTranslations();
+
+            generateKeyboard();
+
+            randomSentenceButton.click();
+
+            const langDropdownButton = document.getElementById('language-dropdown-button');
+            const langDropdownMenu = document.getElementById('language-dropdown-menu');
+
+            langDropdownButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                langDropdownMenu.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!langDropdownButton.contains(event.target) && !langDropdownMenu.contains(event.target)) {
+                    langDropdownMenu.classList.add('hidden');
+                }
+            });
+
+            document.querySelectorAll('#mobile-language-dropdown a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileLanguageDropdown.classList.add('hidden');
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

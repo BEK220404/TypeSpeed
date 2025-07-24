@@ -1,0 +1,416 @@
+﻿<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="terms_of_service_title">Terms of Service - TypeSpeed</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* Стили, скопированные из index3.html для единообразия */
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #f3f4f6;
+        }
+
+        .parallax-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+            .parallax-bg::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pulse-animation {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: .5;
+            }
+        }
+
+        /* Стили для контейнера Условий обслуживания, как для политики */
+        .terms-container {
+            max-width: 800px;
+            margin: 120px auto 40px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            z-index: 1;
+            position: relative;
+            flex-grow: 1;
+        }
+
+            /* Классические шрифты для текста */
+            .terms-container h1,
+            .terms-container h2,
+            .terms-container p,
+            .terms-container ul,
+            .terms-container li {
+                font-family: 'Inter', sans-serif;
+                color: #333;
+                line-height: 1.7;
+            }
+
+            .terms-container h1 {
+                font-size: 2.25rem;
+                font-weight: 700;
+                margin-bottom: 25px;
+                color: #1a202c;
+            }
+
+            .terms-container h2 {
+                font-size: 1.75rem;
+                font-weight: 600;
+                margin-top: 35px;
+                margin-bottom: 15px;
+                color: #1a202c;
+            }
+
+            .terms-container p {
+                margin-bottom: 15px;
+            }
+
+            .terms-container ul {
+                list-style-type: disc;
+                margin-left: 25px;
+                margin-bottom: 15px;
+            }
+
+            .terms-container li {
+                margin-bottom: 8px;
+            }
+
+            .terms-container a {
+                color: #4c51bf;
+                text-decoration: none;
+            }
+
+                .terms-container a:hover {
+                    text-decoration: underline;
+                }
+
+        /* Обновление: Футер теперь центрирован */
+        footer {
+            margin-top: auto;
+            background-color: transparent;
+            color: #d1d5db;
+            padding-bottom: 20px;
+            z-index: 1;
+            position: relative;
+            text-align: center; /* Добавлено для центрирования текста */
+        }
+
+        /* Адаптивные стили для мобильных устройств */
+        @media (max-width: 768px) {
+            .terms-container {
+                max-width: 95%; /* Ширина для мобильных устройств */
+                margin: 100px auto 20px auto; /* Уменьшаем верхний и нижний отступ */
+                padding: 20px; /* Уменьшаем отступы внутри контейнера */
+            }
+
+                .terms-container h1 {
+                    font-size: 1.75rem; /* 28px */
+                    margin-bottom: 20px;
+                }
+
+                .terms-container h2 {
+                    font-size: 1.35rem; /* 22px */
+                    margin-top: 25px;
+                    margin-bottom: 10px;
+                }
+
+                .terms-container p,
+                .terms-container ul,
+                .terms-container li {
+                    font-size: 0.95rem; /* Немного уменьшаем основной текст */
+                }
+
+                .terms-container ul {
+                    margin-left: 20px; /* Немного уменьшаем отступ для списков */
+                }
+
+            /* Навигация для мобильных */
+            nav .max-w-7xl {
+                padding-left: 1.5rem; /* px-6 */
+                padding-right: 1.5rem; /* sm:px-8 */
+            }
+
+            nav .hidden.md:flex {
+                display: none; /* Скрываем десктопные элементы навигации */
+            }
+
+            nav .flex.justify-between.items-center {
+                justify-content: center; /* Центрируем логотип */
+            }
+
+            /* Модальное окно для мобильных */
+            #contact-modal > div {
+                margin: 20px; /* Отступы по бокам */
+                padding: 20px; /* Уменьшаем внутренние отступы */
+                width: calc(100% - 40px); /* Полная ширина минус отступы */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .terms-container {
+                padding: 15px; /* Еще меньше отступ на очень маленьких экранах */
+            }
+
+                .terms-container h1 {
+                    font-size: 1.5rem; /* Еще меньше заголовок */
+                    margin-bottom: 15px;
+                }
+
+                .terms-container h2 {
+                    font-size: 1.2rem; /* Еще меньше подзаголовок */
+                    margin-top: 20px;
+                }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="parallax-bg">
+        <div class="absolute top-1/4 left-1/4 w-4 h-4 bg-white/30 rounded-full pulse-animation"></div>
+        <div class="absolute top-1/3 right-1/3 w-6 h-6 bg-yellow-400/40 rounded-full pulse-animation" style="animation-delay: 0.5s;"></div>
+        <div class="absolute bottom-1/4 left-1/3 w-3 h-3 bg-pink-400/40 rounded-full pulse-animation" style="animation-delay: 1s;"></div>
+    </div>
+
+    <nav class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-200/50">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center">
+                    <a href="/" class="text-3xl font-bold gradient-text">TypeSpeed</a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <button id="contact-button" class="text-gray-600 hover:text-gray-900 transition-colors" data-translate="contact">Contact</button>
+                    <div class="relative">
+                        <button id="language-dropdown-button" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105" data-translate="language">
+                            Language
+                        </button>
+                        <div id="language-dropdown-menu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden">
+                            <a href="/set-language/en" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-lang-code="en">English</a>
+                            <a href="/set-language/ru" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-lang-code="ru">Русский</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="contact-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+            <div class="text-xl font-semibold mb-4">📧 Contact Us</div>
+            <p class="text-gray-700 mb-4">
+                You can contact us anytime at <strong>edu.sbm2204@gmail.com</strong>
+                Support:11111111111111111111111
+            </p>
+            <div class="flex justify-end">
+                <button id="close-modal" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="terms-container">
+        <h1 data-translate="terms_of_service_heading">Условия обслуживания</h1>
+
+        <p data-translate="terms_intro">
+            Добро пожаловать в **TypeSpeed**! Настоящие Условия обслуживания ('Условия') регулируют использование вами веб-сайта TypeSpeed (далее 'Сайт', 'мы', 'нас' или 'наш'). Используя Сайт, вы соглашаетесь соблюдать настоящие Условия. Если вы не согласны с какой-либо частью Условий, пожалуйста, не используйте Сайт.
+        </p>
+
+        <h2 data-translate="use_of_site_heading">Использование Сайта</h2>
+        <p data-translate="use_of_site_text_1">
+            Сайт предоставляется бесплатно для личного, некоммерческого использования с целью практики и улучшения навыков печати.
+        </p>
+        <p data-translate="use_of_site_text_2">
+            Вы соглашаетесь использовать Сайт только в законных целях и таким образом, чтобы не нарушать права, не ограничивать и не препятствовать использованию и получению удовольствия от Сайта любым третьим лицом. Запрещается использовать Сайт для публикации или передачи любых незаконных, вредоносных, угрожающих, оскорбительных, клеветнических, непристойных или иным образом нежелательных материалов.
+        </p>
+
+        <h2 data-translate="intellectual_property_heading">Интеллектуальная собственность</h2>
+        <p data-translate="intellectual_property_text">
+            Все содержимое Сайта, включая текст, графику, логотипы, и программное обеспечение, является собственностью TypeSpeed или его лицензиаров и защищено законами об авторском праве и товарных знаках. Вы можете использовать материалы Сайта только для личного, некоммерческого использования. Любое другое использование, включая воспроизведение, изменение, распространение или переиздание, без предварительного письменного согласия запрещено.
+        </p>
+
+        <h2 data-translate="disclaimer_of_warranties_heading">Отказ от гарантий</h2>
+        <p data-translate="disclaimer_of_warranties_text">
+            Сайт предоставляется на условиях "как есть" и "как доступно". Мы не даем никаких гарантий, явных или подразумеваемых, относительно работы Сайта или информации, контента, материалов или продуктов, включенных в Сайт. Вы используете Сайт на свой страх и риск.
+        </p>
+
+        <h2 data-translate="limitation_of_liability_heading">Ограничение ответственности</h2>
+        <p data-translate="limitation_of_liability_text">
+            Мы не несем ответственности за любые убытки или ущерб любого рода, возникшие в результате использования вами Сайта, включая, помимо прочего, прямые, косвенные, случайные, штрафные и косвенные убытки.
+        </p>
+
+        <h2 data-translate="third_party_links_heading">Ссылки на сторонние сайты</h2>
+        <p data-translate="third_party_links_text">
+            Наш Сайт может содержать ссылки на сторонние веб-сайты или службы, которые не принадлежат и не контролируются TypeSpeed. Мы не контролируем и не несем ответственности за содержание, политику конфиденциальности или практику любых сторонних веб-сайтов или служб. Вы признаете и соглашаетесь с тем, что TypeSpeed не несет ответственности, прямо или косвенно, за любой ущерб или убытки, вызванные или предположительно вызванные использованием или доверием к любому такому контенту, товарам или услугам, доступным на или через любые такие веб-сайты или службы.
+        </p>
+
+        <h2 data-translate="changes_to_terms_heading">Изменения в Условиях обслуживания</h2>
+        <p data-translate="changes_to_terms_text">
+            Мы оставляем за собой право изменять или заменять настоящие Условия в любое время. Если изменение является существенным, мы постараемся уведомить вас об этом как минимум за 30 дней до вступления в силу новых условий. Что составляет существенное изменение, будет определяться по нашему усмотрению. Продолжая доступ или использование нашего Сайта после вступления в силу этих изменений, вы соглашаетесь с пересмотренными условиями.
+        </p>
+
+        <h2 data-translate="governing_law_heading">Применимое законодательство</h2>
+        <p data-translate="governing_law_text">
+            Настоящие Условия регулируются и толкуются в соответствии с законодательством [Ваша страна/штат, например, "Республика Узбекистан"], без учета его положений о коллизионном праве.
+        </p>
+
+        <h2 data-translate="contact_us_terms_heading">Свяжитесь с нами</h2>
+        <p data-translate="contact_us_terms_text">
+            Если у вас есть какие-либо вопросы относительно настоящих Условий, пожалуйста, свяжитесь с нами:
+        </p>
+        <ul>
+            <li>По электронной почте: <a href="mailto:edu.sbm2204@gmail.com">edu.sbm2204@gmail.com</a></li>
+        </ul>
+    </div>
+
+    <footer class="text-center">
+        <p class="text-sm">&copy; 2025 TypeSpeed. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const translations = {
+            en: {
+                home_title: "TypeSpeed",
+                contact: "Contact",
+                language: "Language",
+                home: "Home",
+                privacy_policy_title: "Privacy Policy - TypeSpeed",
+                terms_of_service_title: "Terms of Service - TypeSpeed",
+                terms_of_service_heading: "Terms of Service",
+                terms_intro: "Welcome to **TypeSpeed**! These Terms of Service ('Terms') govern your use of the TypeSpeed website (the 'Site', 'we', 'us', or 'our'). By using the Site, you agree to be bound by these Terms. If you disagree with any part of the Terms, then you may not access the Site.",
+                use_of_site_heading: "Use of the Site",
+                use_of_site_text_1: "The Site is provided free of charge for personal, non-commercial use to practice and improve typing skills.",
+                use_of_site_text_2: "You agree to use the Site only for lawful purposes and in a way that does not infringe the rights of, restrict or inhibit anyone else's use and enjoyment of the Site. Prohibited behavior includes harassing or causing distress or inconvenience to any person, transmitting obscene or offensive content or disrupting the normal flow of dialogue within the Site.",
+                intellectual_property_heading: "Intellectual Property",
+                intellectual_property_text: "All content on the Site, including text, graphics, logos, and software, is the property of TypeSpeed or its licensors and is protected by copyright and trademark laws. You may use the Site's material only for your personal, non-commercial use. Any other use, including the reproduction, modification, distribution, or republication, without prior written permission, is strictly prohibited.",
+                disclaimer_of_warranties_heading: "Disclaimer of Warranties",
+                disclaimer_of_warranties_text: "The Site is provided on an 'as is' and 'as available' basis. We make no representations or warranties of any kind, express or implied, as to the operation of the Site or the information, content, materials, or products included on the Site. You expressly agree that your use of the Site is at your sole risk.",
+                limitation_of_liability_heading: "Limitation of Liability",
+                limitation_of_liability_text: "We will not be liable for any damages of any kind arising from the use of the Site, including, but not limited to direct, indirect, incidental, punitive, and consequential damages.",
+                third_party_links_heading: "Links to Other Websites",
+                third_party_links_text: "Our Site may contain links to third-party web sites or services that are not owned or controlled by TypeSpeed. TypeSpeed has no control over, and assumes no responsibility for, the content, privacy policies, or practices of any third party web sites or services. You further acknowledge and agree that TypeSpeed shall not be responsible or liable, directly or indirectly, for any damage or loss caused or alleged to be caused by or in connection with use of or reliance on any such content, goods or services available on or through any such web sites or services.",
+                changes_to_terms_heading: "Changes to These Terms of Service",
+                changes_to_terms_text: "We reserve the right to modify or replace these Terms at any time. If a revision is material, we will try to provide at least 30 days' notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion. By continuing to access or use our Site after those revisions become effective, you agree to be bound by the revised terms.",
+                governing_law_heading: "Governing Law",
+                governing_law_text: "These Terms shall be governed and construed in accordance with the laws of [Your Country/State, e.g., 'Republic of Uzbekistan'], without regard to its conflict of law provisions.",
+                contact_us_terms_heading: "Contact Us",
+                contact_us_terms_text: "If you have any questions about these Terms, please contact us:",
+            },
+            ru: {
+                home_title: "TypeSpeed",
+                contact: "Контакты",
+                language: "Язык",
+                home: "Домой",
+                privacy_policy_title: "Политика конфиденциальности - TypeSpeed",
+                terms_of_service_title: "Условия обслуживания - TypeSpeed",
+                terms_of_service_heading: "Условия обслуживания",
+                terms_intro: "Добро пожаловать в **TypeSpeed**! Настоящие Условия обслуживания ('Условия') регулируют использование вами веб-сайта TypeSpeed (далее 'Сайт', 'мы', 'нас' или 'наш'). Используя Сайт, вы соглашаетесь соблюдать настоящие Условия. Если вы не согласны с какой-либо частью Условий, пожалуйста, не используйте Сайт.",
+                use_of_site_heading: "Использование Сайта",
+                use_of_site_text_1: "Сайт предоставляется бесплатно для личного, некоммерческого использования с целью практики и улучшения навыков печати.",
+                use_of_site_text_2: "Вы соглашаетесь использовать Сайт только в законных целях и таким образом, чтобы не нарушать права, не ограничивать и не препятствовать использованию и получению удовольствия от Сайта любым третьим лицом. Запрещается использовать Сайт для публикации или передачи любых незаконных, вредоносных, угрожающих, оскорбительных, клеветнических, непристойных или иным образом нежелательных материалов.",
+                intellectual_property_heading: "Интеллектуальная собственность",
+                intellectual_property_text: "Все содержимое Сайта, включая текст, графику, логотипы, и программное обеспечение, является собственностью TypeSpeed или его лицензиаров и защищено законами об авторском праве и товарных знаках. Вы можете использовать материалы Сайта только для личного, некоммерческого использования. Любое другое использование, включая воспроизведение, изменение, распространение или переиздание, без предварительного письменного согласия запрещено.",
+                disclaimer_of_warranties_heading: "Отказ от гарантий",
+                disclaimer_of_warranties_text: "Сайт предоставляется на условиях \"как есть\" и \"как доступно\". Мы не даем никаких гарантий, явных или подразумеваемых, относительно работы Сайта или информации, контента, материалов или продуктов, включенных в Сайт. Вы используете Сайт на свой страх и риск.",
+                limitation_of_liability_heading: "Ограничение ответственности",
+                limitation_of_liability_text: "Мы не несем ответственности за любые убытки или ущерб любого рода, возникшие в результате использования вами Сайта, включая, помимо прочего, прямые, косвенные, случайные, штрафные и косвенные убытки.",
+                third_party_links_heading: "Ссылки на сторонние сайты",
+                third_party_links_text: "Наш Сайт может содержать ссылки на сторонние веб-сайты или службы, которые не принадлежат и не контролируются TypeSpeed. Мы не контролируем и не несем ответственности за содержание, политику конфиденциальности или практику любых сторонних веб-сайтов или служб. Вы признаете и соглашаетесь с тем, что TypeSpeed не несет ответственности, прямо или косвенно, за любой ущерб или убытки, вызванные или предположительно вызванные использованием или доверием к любому такому контенту, товарам или услугам, доступным на или через любые такие веб-сайты или службы.",
+                changes_to_terms_heading: "Изменения в Условиях обслуживания",
+                changes_to_terms_text: "Мы оставляем за собой право изменять или заменять настоящие Условия в любое время. Если изменение является существенным, мы постараемся уведомить вас об этом как минимум за 30 дней до вступления в силу новых условий. Что составляет существенное изменение, будет определяться по нашему усмотрению. Продолжая доступ или использование нашего Сайта после вступления в силу этих изменений, вы соглашаетесь с пересмотренными условиями.",
+                governing_law_heading: "Применимое законодательство",
+                governing_law_text: "Настоящие Условия регулируются и толкуются в соответствии с законодательством [Ваша страна/штат, например, 'Республика Узбекистан'], без учета его положений о коллизионном праве.",
+                contact_us_terms_heading: "Свяжитесь с нами",
+                contact_us_terms_text: "Если у вас есть какие-либо вопросы относительно настоящих Условий, пожалуйста, свяжитесь с нами:",
+            }
+        };
+
+        const currentLang = "{{ lang }}";
+
+        function applyTranslations() {
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.dataset.translate;
+                if (translations[currentLang] && translations[currentLang][key]) {
+                    element.innerHTML = translations[currentLang][key];
+                }
+            });
+            document.title = translations[currentLang].terms_of_service_title;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            applyTranslations();
+
+            // dropdown logic
+            const langDropdownButton = document.getElementById('language-dropdown-button');
+            const langDropdownMenu = document.getElementById('language-dropdown-menu');
+
+            langDropdownButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                langDropdownMenu.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!langDropdownButton.contains(event.target) && !langDropdownMenu.contains(event.target)) {
+                    langDropdownMenu.classList.add('hidden');
+                }
+            });
+
+            // modal logic
+            const contactBtn = document.getElementById('contact-button');
+            const modal = document.getElementById('contact-modal');
+            const closeModal = document.getElementById('close-modal');
+
+            contactBtn.addEventListener('click', () => {
+                modal.classList.remove('hidden');
+            });
+
+            closeModal.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

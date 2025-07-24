@@ -1,0 +1,391 @@
+﻿<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="about_us_title">About Us - TypeSpeed</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* Стили, скопированные из index3.html для единообразия */
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #f3f4f6;
+        }
+
+        .parallax-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+            .parallax-bg::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pulse-animation {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: .5;
+            }
+        }
+
+        /* Стили для контейнера "О сайте", как для политики */
+        .about-container {
+            max-width: 800px;
+            margin: 120px auto 40px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            z-index: 1;
+            position: relative;
+            flex-grow: 1;
+        }
+
+            /* Классические шрифты для текста */
+            .about-container h1,
+            .about-container h2,
+            .about-container p,
+            .about-container ul,
+            .about-container li {
+                font-family: 'Inter', sans-serif;
+                color: #333;
+                line-height: 1.7;
+            }
+
+            .about-container h1 {
+                font-size: 2.25rem;
+                font-weight: 700;
+                margin-bottom: 25px;
+                color: #1a202c;
+            }
+
+            .about-container h2 {
+                font-size: 1.75rem;
+                font-weight: 600;
+                margin-top: 35px;
+                margin-bottom: 15px;
+                color: #1a202c;
+            }
+
+            .about-container p {
+                margin-bottom: 15px;
+            }
+
+            .about-container ul {
+                list-style-type: disc;
+                margin-left: 25px;
+                margin-bottom: 15px;
+            }
+
+            .about-container li {
+                margin-bottom: 8px;
+            }
+
+            .about-container a {
+                color: #4c51bf;
+                text-decoration: none;
+            }
+
+                .about-container a:hover {
+                    text-decoration: underline;
+                }
+
+        /* Обновление: Футер теперь центрирован */
+        footer {
+            margin-top: auto;
+            background-color: transparent;
+            color: #d1d5db;
+            padding-bottom: 20px;
+            z-index: 1;
+            position: relative;
+            text-align: center; /* Добавлено для центрирования текста */
+        }
+
+        /* Адаптивные стили для мобильных устройств */
+        @media (max-width: 768px) {
+            .about-container {
+                max-width: 95%; /* Ширина для мобильных устройств */
+                margin: 100px auto 20px auto; /* Уменьшаем верхний и нижний отступ */
+                padding: 20px; /* Уменьшаем отступы внутри контейнера */
+            }
+
+                .about-container h1 {
+                    font-size: 1.75rem; /* 28px */
+                    margin-bottom: 20px;
+                }
+
+                .about-container h2 {
+                    font-size: 1.35rem; /* 22px */
+                    margin-top: 25px;
+                    margin-bottom: 10px;
+                }
+
+                .about-container p,
+                .about-container ul,
+                .about-container li {
+                    font-size: 0.95rem; /* Немного уменьшаем основной текст */
+                }
+
+                .about-container ul {
+                    margin-left: 20px; /* Немного уменьшаем отступ для списков */
+                }
+
+            /* Навигация для мобильных */
+            nav .max-w-7xl {
+                padding-left: 1.5rem; /* px-6 */
+                padding-right: 1.5rem; /* sm:px-8 */
+            }
+
+            nav .hidden.md:flex {
+                display: none; /* Скрываем десктопные элементы навигации */
+            }
+
+            nav .flex.justify-between.items-center {
+                justify-content: center; /* Центрируем логотип */
+            }
+
+            /* Модальное окно для мобильных */
+            #contact-modal > div {
+                margin: 20px; /* Отступы по бокам */
+                padding: 20px; /* Уменьшаем внутренние отступы */
+                width: calc(100% - 40px); /* Полная ширина минус отступы */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .about-container {
+                padding: 15px; /* Еще меньше отступ на очень маленьких экранах */
+            }
+
+                .about-container h1 {
+                    font-size: 1.5rem; /* Еще меньше заголовок */
+                    margin-bottom: 15px;
+                }
+
+                .about-container h2 {
+                    font-size: 1.2rem; /* Еще меньше подзаголовок */
+                    margin-top: 20px;
+                }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="parallax-bg">
+        <div class="absolute top-1/4 left-1/4 w-4 h-4 bg-white/30 rounded-full pulse-animation"></div>
+        <div class="absolute top-1/3 right-1/3 w-6 h-6 bg-yellow-400/40 rounded-full pulse-animation" style="animation-delay: 0.5s;"></div>
+        <div class="absolute bottom-1/4 left-1/3 w-3 h-3 bg-pink-400/40 rounded-full pulse-animation" style="animation-delay: 1s;"></div>
+    </div>
+
+    <nav class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-200/50">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center">
+                    <a href="/" class="text-3xl font-bold gradient-text">TypeSpeed</a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <button id="contact-button" class="text-gray-600 hover:text-gray-900 transition-colors" data-translate="contact">Contact</button>
+                    <div class="relative">
+                        <button id="language-dropdown-button" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105" data-translate="language">
+                            Language
+                        </button>
+                        <div id="language-dropdown-menu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden">
+                            <a href="/set-language/en" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-lang-code="en">English</a>
+                            <a href="/set-language/ru" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-lang-code="ru">Русский</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="contact-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+            <div class="text-xl font-semibold mb-4">📧 Contact Us</div>
+            <p class="text-gray-700 mb-4">
+                You can contact us anytime at <strong>edu.sbm2204@gmail.com</strong>
+                Support:11111111111111111111111
+            </p>
+            <div class="flex justify-end">
+                <button id="close-modal" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="about-container">
+        <h1 data-translate="about_us_heading">О сайте TypeSpeed</h1>
+
+        <p data-translate="about_us_intro">
+            Добро пожаловать в **TypeSpeed** — ваш идеальный инструмент для освоения быстрой и точной печати! Мы создали этот сайт с одной целью: помочь вам значительно улучшить свои навыки набора текста совершенно бесплатно.
+        </p>
+
+        <h2 data-translate="our_mission_heading">Наша миссия</h2>
+        <p data-translate="our_mission_text">
+            В современном цифровом мире скорость печати имеет огромное значение. Будь то работа, учеба или просто общение, умение быстро и без ошибок набирать текст экономит ваше время и повышает продуктивность. Наша миссия — предоставить простой, эффективный и увлекательный тренажер, доступный каждому.
+        </p>
+
+        <h2 data-translate="what_we_offer_heading">Что мы предлагаем</h2>
+        <ul>
+            <li data-translate="offer_practice">**Тренажер печати:** Интерактивные упражнения, которые адаптируются к вашему прогрессу, помогая наращивать скорость и точность.</li>
+            <li data-translate="offer_multilingual">**Многоязычная поддержка:** Практикуйтесь на разных языках, включая русский и английский, что делает TypeSpeed универсальным инструментом.</li>
+            <li data-translate="offer_simplicity">**Простота и доступность:** Наш сайт разработан с акцентом на интуитивно понятный интерфейс, не требующий регистрации или сложных настроек. Просто откройте и начните печатать!</li>
+            <li data-translate="offer_free">**Бесплатно:** Все функции TypeSpeed доступны совершенно бесплатно, без скрытых платежей или подписок.</li>
+        </ul>
+
+        <h2 data-translate="our_vision_heading">Наше видение</h2>
+        <p data-translate="our_vision_text">
+            Мы постоянно работаем над улучшением TypeSpeed, чтобы сделать его еще полезнее и интереснее. В будущем мы планируем добавлять новые функции, такие как персонализированные уроки, отслеживание прогресса и многое другое, оставаясь при этом простым и доступным для всех.
+        </p>
+
+        <h2 data-translate="join_us_heading">Присоединяйтесь к нам</h2>
+        <p data-translate="join_us_text">
+            Начните свой путь к мастерству печати уже сегодня! Практикуйтесь регулярно, и вы удивитесь, как быстро улучшаются ваши навыки.
+        </p>
+
+        <h2 data-translate="contact_us_about_heading">Свяжитесь с нами</h2>
+        <p data-translate="contact_us_about_text">
+            Если у вас есть вопросы, предложения или отзывы, пожалуйста, не стесняйтесь связаться с нами:
+        </p>
+        <ul>
+            <li>По электронной почте: <a href="mailto:edu.sbm2204@gmail.com">edu.sbm2204@gmail.com</a></li>
+        </ul>
+    </div>
+
+    <footer class="text-center">
+        <p class="text-sm">&copy; 2025 TypeSpeed. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const translations = {
+            en: {
+                home_title: "TypeSpeed",
+                contact: "Contact",
+                language: "Language",
+                home: "Home",
+                about_us_title: "About Us - TypeSpeed",
+                about_us_heading: "About TypeSpeed",
+                about_us_intro: "Welcome to **TypeSpeed** — your ultimate tool for mastering fast and accurate typing! We built this website with one goal in mind: to help you significantly improve your typing skills completely free of charge.",
+                our_mission_heading: "Our Mission",
+                our_mission_text: "In today's digital world, typing speed is incredibly important. Whether it's for work, study, or just communication, being able to type quickly and accurately saves you time and boosts productivity. Our mission is to provide a simple, effective, and engaging typing trainer that is accessible to everyone.",
+                what_we_offer_heading: "What We Offer",
+                offer_practice: "**Typing Trainer:** Interactive exercises that adapt to your progress, helping you build speed and accuracy.",
+                offer_multilingual: "**Multilingual Support:** Practice in different languages, including Russian and English, making TypeSpeed a versatile tool.",
+                offer_simplicity: "**Simplicity and Accessibility:** Our website is designed with an emphasis on an intuitive interface, requiring no registration or complex setup. Just open and start typing!",
+                offer_free: "**Free of Charge:** All TypeSpeed features are available completely free, with no hidden fees or subscriptions.",
+                our_vision_heading: "Our Vision",
+                our_vision_text: "We are constantly working to improve TypeSpeed to make it even more useful and engaging. In the future, we plan to add new features such as personalized lessons, progress tracking, and more, while remaining simple and accessible to everyone.",
+                join_us_heading: "Join Us",
+                join_us_text: "Start your journey to typing mastery today! Practice regularly, and you'll be amazed at how quickly your skills improve.",
+                contact_us_about_heading: "Contact Us",
+                contact_us_about_text: "If you have any questions, suggestions, or feedback, please do not hesitate to contact us:",
+            },
+            ru: {
+                home_title: "TypeSpeed",
+                contact: "Контакты",
+                language: "Язык",
+                home: "Домой",
+                about_us_title: "О сайте - TypeSpeed",
+                about_us_heading: "О сайте TypeSpeed",
+                about_us_intro: "Добро пожаловать в **TypeSpeed** — ваш идеальный инструмент для освоения быстрой и точной печати! Мы создали этот сайт с одной целью: помочь вам значительно улучшить свои навыки набора текста совершенно бесплатно.",
+                our_mission_heading: "Наша миссия",
+                our_mission_text: "В современном цифровом мире скорость печати имеет огромное значение. Будь то работа, учеба или просто общение, умение быстро и без ошибок набирать текст экономит ваше время и повышает продуктивность. Наша миссия — предоставить простой, эффективный и увлекательный тренажер, доступный каждому.",
+                what_we_offer_heading: "Что мы предлагаем",
+                offer_practice: "**Тренажер печати:** Интерактивные упражнения, которые адаптируются к вашему прогрессу, помогая наращивать скорость и точность.",
+                offer_multilingual: "**Многоязычная поддержка:** Практикуйтесь на разных языках, включая русский и английский, что делает TypeSpeed универсальным инструментом.",
+                offer_simplicity: "**Простота и доступность:** Наш сайт разработан с акцентом на интуитивно понятный интерфейс, не требующий регистрации или сложных настроек. Просто откройте и начните печатать!",
+                offer_free: "**Бесплатно:** Все функции TypeSpeed доступны совершенно бесплатно, без скрытых платежей или подписок.",
+                our_vision_heading: "Наше видение",
+                our_vision_text: "Мы постоянно работаем над улучшением TypeSpeed, чтобы сделать его еще полезнее и интереснее. В будущем мы планируем добавлять новые функции, такие как персонализированные уроки, отслеживание прогресса и многое другое, оставаясь при этом простым и доступным для всех.",
+                join_us_heading: "Присоединяйтесь к нам",
+                join_us_text: "Начните свой путь к мастерству печати уже сегодня! Практикуйтесь регулярно, и вы удивитесь, как быстро улучшаются ваши навыки.",
+                contact_us_about_heading: "Свяжитесь с нами",
+                contact_us_about_text: "Если у вас есть вопросы, предложения или отзывы, пожалуйста, не стесняйтесь связаться с нами:",
+            }
+        };
+
+        const currentLang = "{{ lang }}";
+
+        function applyTranslations() {
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.dataset.translate;
+                if (translations[currentLang] && translations[currentLang][key]) {
+                    element.innerHTML = translations[currentLang][key];
+                }
+            });
+            document.title = translations[currentLang].about_us_title;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            applyTranslations();
+
+            // dropdown logic
+            const langDropdownButton = document.getElementById('language-dropdown-button');
+            const langDropdownMenu = document.getElementById('language-dropdown-menu');
+
+            langDropdownButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                langDropdownMenu.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!langDropdownButton.contains(event.target) && !langDropdownMenu.contains(event.target)) {
+                    langDropdownMenu.classList.add('hidden');
+                }
+            });
+
+            // modal logic
+            const contactBtn = document.getElementById('contact-button');
+            const modal = document.getElementById('contact-modal');
+            const closeModal = document.getElementById('close-modal');
+
+            contactBtn.addEventListener('click', () => {
+                modal.classList.remove('hidden');
+            });
+
+            closeModal.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
