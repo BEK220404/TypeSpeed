@@ -135,8 +135,19 @@
                     background-color: #f3f4f6; /* hover:bg-gray-100 */
                 }
     </style>
+    <script type="text/plain" data-cookieconsent="statistics">
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-5J4QZM8T');
+    </script>
 </head>
 <body class="bg-gray-50">
+    <noscript type="text/plain" data-cookieconsent="statistics">
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5J4QZM8T"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
     <nav class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-200/50">
         <div class="max-w-7xl mx-auto px-6 sm:px-8">
             <div class="flex justify-between items-center h-20">
@@ -236,7 +247,7 @@
         home_title: "TypeSpeed",
         contact: "Contact",
         language: "Language",
-        cookie_settings: "Cookie Settings", // НОВОЕ
+        cookie_settings: "Cookie Settings", // ВОЗВРАЩЕНО
         typespeed: "TypeSpeed",
         welcome: "Welcome to",
         hero_description: "Boost your typing speed — start training right now. Practice daily and become a keyboard master!",
@@ -251,7 +262,7 @@
         home_title: "TypeSpeed",
         contact: "Контакты",
         language: "Язык",
-        cookie_settings: "Настройки Cookie", // НОВОЕ
+        cookie_settings: "Настройки Cookie", // ВОЗВРАЩЕНО
         typespeed: "TypeSpeed",
         welcome: "Добро пожаловать в",
         hero_description: "Прокачай свою скорость печати — начни тренироваться прямо сейчас. Тренируйся каждый день и стань мастером клавиатуры!",
@@ -363,14 +374,13 @@
         });
       });
 
-      // 🍪 Cookie settings button logic
+      // 🍪 Cookie settings button logic - ВОЗВРАЩЕНА
       const cookieSettingsButton = document.getElementById('cookie-settings-button');
       const mobileCookieSettingsButton = document.getElementById('mobile-cookie-settings-button');
 
       function openCookiebotDialog() {
-        // Проверяем, что объект Cookiebot доступен
         if (typeof Cookiebot !== 'undefined') {
-          Cookiebot.show(); // Это функция Cookiebot для открытия диалога настроек
+          Cookiebot.show();
         } else {
           console.warn('Cookiebot object not found. Ensure Cookiebot script is loaded.');
         }
@@ -383,7 +393,6 @@
       if (mobileCookieSettingsButton) {
         mobileCookieSettingsButton.addEventListener('click', () => {
           openCookiebotDialog();
-          // Закрываем мобильное меню после открытия диалога
           document.getElementById('mobile-menu-dropdown').classList.add('hidden');
           document.getElementById('hamburger-button').classList.remove('open');
         });
